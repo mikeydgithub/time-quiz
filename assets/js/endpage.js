@@ -3,6 +3,7 @@ var saveScoreBtn = document.querySelector('#saveScoreBtn')
 var finalScore = document.querySelector('#finalScore')
 var mostRecentScore = localStorage.getItem('mostRecentScore')
 
+console.log("endpageloaded")
 var highScores = JSON.parse(localStorage.getItem('highScores')) || []
 
 var maxHighScores = 5
@@ -31,7 +32,8 @@ saveHighScore = e => {
     highScores.splice(5)
 
     localStorage.setItem('highScores',JSON.stringify(highScores))
-    window.location.assign('/')
+    window.location.assign('highscores.html')
+    
 
     
 }
