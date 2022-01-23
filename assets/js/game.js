@@ -145,7 +145,7 @@ updateTime = () => {
     else {
     	timer.style.color = "red";
     	timer.innerHTML = "Out of time!";
-        return window.location.assign('/endpage.html')
+        return window.location.assign('endpage.html')
     }
 }
 
