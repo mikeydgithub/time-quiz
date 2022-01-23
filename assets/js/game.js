@@ -3,12 +3,20 @@ var choices = Array.from(document.querySelectorAll('.choice-text'));
 var progressText = document.querySelector('#progressText');
 var scoreText = document.querySelector('#score');
 var progressBarFull = document.querySelector('#progressBarFull');
+var timer = document.querySelector('#timer');
+
+var maxTime;
+var currentTime;
+var incorrectPenalty = 10;
+resetTimer(60);
+setInterval(updateTime, 1000);
 
 var currentQuestion = {}
 var acceptingAnswers = true
 var score = 0
 var questionCounter = 0
 var availableQuestions = []
+
 
 var questions = [
     {
@@ -36,11 +44,11 @@ var questions = [
         answer: 3,
     },
     {
-        question: "Which one of the following is known as the Equality operator, which is used to check whether the two values are equal or not:",
-        choice1: "=",
-        choice2: "===",
-        choice3: "==",
-        choice4: "&&",
+        question: "Which one of the following will create a prompt?",
+        choice1: "console.log",
+        choice2: "prompt.alert",
+        choice3: "window.prompt",
+        choice4: "None of the above",
         answer: 3,
     },
     {
@@ -95,11 +103,15 @@ choices.forEach(choice => {
        acceptingAnswers = false
        var selectedChoice = e.target
        var selectedAnswer = selectedChoice.dataset['number']
-
+        
        var classToApply = selectedAnswer == currentQuestion.answer ? 'correct' : 'incorrect'
 
-       if(classToApply === 'correct') {
+       if (classToApply === 'correct') {
            incrementScore(scorePoints)
+       }
+
+       if (classToApply === 'incorrect') {
+        currentTime = currentTime - incorrectPenalty;
        }
 
        selectedChoice.parentElement.classList.add(classToApply)
@@ -109,13 +121,37 @@ choices.forEach(choice => {
             getNewQuestion()
 
        }, 1000)
+       console.log(scorePoints)
     })
 })
 
-incrementScore = num => {
-    score +=num
-    scoreText.innerText = score
+
+function resetTimer(timeval){
+	maxTime = timeval;
+	currentTime = maxTime;
 }
+
+function updateTime() {
+    if(currentTime > 0) {
+    	currentTime--;
+        timer.innerHTML = currentTime + "(s)";
+        
+        if(currentTime / maxTime > .75) {
+        	timer.style.color = "green";
+        } else if(currentTime / maxTime > .5) {
+        	timer.style.color = "yellow";
+        }
+        else {
+        	timer.style.color = "orange";
+        }
+    }
+    else {
+    	timer.style.color = "red";
+    	timer.innerHTML = "Out of time!";
+        return window.location.assign('/endpage.html')
+    }
+}
+
 
 startGame()
 

@@ -67,8 +67,18 @@ body {
     width: 0%;
 }
 
+#timer {
+    font-size: 20px;
+}
+
 @media screen and (max-width: 768px) {
     .choice-container {
         min-width: 40rem;
+    }
+}
+
+@media screen and (max-width: 375px) {
+    .choice-container {
+        min-width: 20rem;
     }
 }
