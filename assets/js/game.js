@@ -5,21 +5,31 @@ var scoreText = document.querySelector('#score');
 var progressBarFull = document.querySelector('#progressBarFull');
 var timer = document.querySelector('#timer');
 
+var score = 0;
+var scorePoints = 100;
+
 var maxTime;
 var currentTime;
 var incorrectPenalty = 10;
-resetTimer(60);
-setInterval(updateTime, 1000);
 
-var currentQuestion = {}
-var acceptingAnswers = true
-var score = 0
-var questionCounter = 0
-var availableQuestions = []
+var questionCounter = 0;
+var maxQuestions = 5;
+var availableQuestions = [];
+var currentQuestion = {};
+var acceptingAnswers = true;
 
 incrementScore = num => {
-    score +=num
-    scoreText.innerText = score
+    score +=num;
+    scoreText.innerText = score;   
+}
+
+startGame = () => {
+    questionCounter = 0;
+    score = 0;
+    availableQuestions = [...questions];
+    getNewQuestion();
+    resetTimer(60);
+    setInterval(updateTime, 1000);
 }
 
 var questions = [
@@ -65,77 +75,60 @@ var questions = [
     }
 ];
 
-var scorePoints = 100;
-var maxQuestions = 5;
-
-startGame = () => {
-    questionCounter = 0;
-    score = 0;
-    availableQuestions = [...questions];
-    getNewQuestion();
-}
-
 getNewQuestion = () => {
     if(availableQuestions.length === 0 || questionCounter > maxQuestions) {
-        localStorage.setItem('mostRecentScore', score)
+        localStorage.setItem('mostRecentScore', score);
 
-        return window.location.assign('/endpage.html')
+        return window.location.assign('/endpage.html');
     }
 
-    questionCounter++
-    progressText.innerText = `Question ${questionCounter} of ${maxQuestions}`
-    progressBarFull.style.width = `${(questionCounter/maxQuestions) * 100}%`
+    questionCounter++;
+    progressText.innerText = `Question ${questionCounter} of ${maxQuestions}`;
+    progressBarFull.style.width = `${(questionCounter/maxQuestions) * 100}%`;
 
-    var questionsIndex = Math.floor(Math.random() * availableQuestions.length)
-    currentQuestion = availableQuestions[questionsIndex]
-    question.innerText = currentQuestion.question
+    var questionsIndex = Math.floor(Math.random() * availableQuestions.length);
+    currentQuestion = availableQuestions[questionsIndex];
+    question.innerText = currentQuestion.question;
 
     choices.forEach(choice => {
-        var number = choice.dataset['number']
-        choice.innerText = currentQuestion['choice' + number]
+        var number = choice.dataset['number'];
+        choice.innerText = currentQuestion['choice' + number];
     })
 
-    availableQuestions.splice(questionsIndex, 1)
-
-    acceptingAnswers = true
+    availableQuestions.splice(questionsIndex, 1);
+    acceptingAnswers = true;
 }
 
 choices.forEach(choice => {
     choice.addEventListener('click', e => {
-       if(!acceptingAnswers) return
+       if(!acceptingAnswers) return;
        
-       acceptingAnswers = false
-       var selectedChoice = e.target
-       var selectedAnswer = selectedChoice.dataset['number']
-        
-       var classToApply = selectedAnswer == currentQuestion.answer ? 'correct' : 'incorrect'
-
+       acceptingAnswers = false;
+       var selectedChoice = e.target;
+       var selectedAnswer = selectedChoice.dataset['number'];
+       var classToApply = selectedAnswer == currentQuestion.answer ? 'correct' : 'incorrect';
        if (classToApply === 'correct') {
-           incrementScore(scorePoints)
+           incrementScore(scorePoints);
        }
-
        if (classToApply === 'incorrect') {
         currentTime = currentTime - incorrectPenalty;
        }
-
-       selectedChoice.parentElement.classList.add(classToApply)
-       
+       selectedChoice.parentElement.classList.add(classToApply);
        setTimeout(() => {
-           selectedChoice.parentElement.classList.remove(classToApply)
-            getNewQuestion()
-
-       }, 1000)
-       console.log(scorePoints)
+           selectedChoice.parentElement.classList.remove(classToApply);
+            getNewQuestion();
+       }, 1000);
+       console.log(scorePoints);
     })
 })
 
 
-function resetTimer(timeval){
+resetTimer = timeval => {
 	maxTime = timeval;
 	currentTime = maxTime;
 }
 
-function updateTime() {
+updateTime = () => {
     if(currentTime > 0) {
     	currentTime--;
         timer.innerHTML = currentTime + "(s)";
