@@ -1,7 +1,6 @@
-console.log("highScores");
-var highScoresList = document.querySelector('#highScoresList')
-var highScores = JSON.parse(localStorage.getItem('highScores')) || []
-console.log("scores" + highScores);
+var highScoresList = document.querySelector('#highScoresList');
+var highScores = JSON.parse(localStorage.getItem('highScores')) || [];
+
 
 highScoresList.innerHTML =
 highScores.map(score => {

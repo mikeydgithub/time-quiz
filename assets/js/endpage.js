@@ -4,8 +4,6 @@ var finalScore = document.querySelector('#finalScore');
 var mostRecentScore = localStorage.getItem('mostRecentScore');
 
 var maxHighScores = 5;
-
-console.log("endpageloaded");
 var highScores = JSON.parse(localStorage.getItem('highScores')) || [];
 
 
