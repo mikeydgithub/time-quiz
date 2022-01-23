@@ -17,6 +17,10 @@ var score = 0
 var questionCounter = 0
 var availableQuestions = []
 
+incrementScore = num => {
+    score +=num
+    scoreText.innerText = score
+}
 
 var questions = [
     {
